@@ -5,7 +5,7 @@ import json
 import io
 from httpretty import HTTPretty, httprettified
 import pytumblr
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 
 
 class TumblrRestClientTest(unittest.TestCase):
@@ -13,7 +13,7 @@ class TumblrRestClientTest(unittest.TestCase):
     """
 
     def setUp(self):
-        with open('tests/tumblr_credentials.json', 'r') as f:
+        with open('tumblr_credentials.json', 'r') as f:
             credentials = json.loads(f.read())
         self.client = pytumblr.TumblrRestClient(credentials['consumer_key'], credentials['consumer_secret'], credentials['oauth_token'], credentials['oauth_token_secret'])
 
@@ -124,7 +124,7 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['url'][0] == 'codingjester.tumblr.com'
+        assert experimental_body[b'url'][0] == b'codingjester.tumblr.com'
 
     @httprettified
     def test_unfollow(self):
@@ -136,7 +136,7 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['url'][0] == 'codingjester.tumblr.com'
+        assert experimental_body[b'url'][0] == b'codingjester.tumblr.com'
 
     @httprettified
     def test_reblog(self):
@@ -148,10 +148,10 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == 'POST'
-        assert experimental_body['id'][0] == '123'
-        assert experimental_body['reblog_key'][0] == 'adsfsadf'
-        assert experimental_body['state'][0] == 'coolguy'
-        assert experimental_body['tags'][0] == 'hello,world'
+        assert experimental_body[b'id'][0] == b'123'
+        assert experimental_body[b'reblog_key'][0] == b'adsfsadf'
+        assert experimental_body[b'state'][0] == b'coolguy'
+        assert experimental_body[b'tags'][0] == b'hello,world'
 
     @httprettified
     def test_edit_post(self):
@@ -163,9 +163,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == 'POST'
-        assert experimental_body['id'][0] == '123'
-        assert experimental_body['state'][0] == 'coolguy'
-        assert experimental_body['tags'][0] == 'hello,world'
+        assert experimental_body[b'id'][0] == b'123'
+        assert experimental_body[b'state'][0] == b'coolguy'
+        assert experimental_body[b'tags'][0] == b'hello,world'
 
     @httprettified
     def test_like(self):
@@ -177,8 +177,8 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['id'][0] == '123'
-        assert experimental_body['reblog_key'][0] == 'adsfsadf'
+        assert experimental_body[b'id'][0] == b'123'
+        assert experimental_body[b'reblog_key'][0] == b'adsfsadf'
 
     @httprettified
     def test_unlike(self):
@@ -190,8 +190,8 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['id'][0] == '123'
-        assert experimental_body['reblog_key'][0] == 'adsfsadf'
+        assert experimental_body[b'id'][0] == b'123'
+        assert experimental_body[b'reblog_key'][0] == b'adsfsadf'
 
     @httprettified
     def test_info(self):
@@ -259,7 +259,7 @@ class TumblrRestClientTest(unittest.TestCase):
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['tags'][0] == "omg,nice"
+        assert experimental_body[b'tags'][0] == b"omg,nice"
 
     @httprettified
     def test_no_tags(self):
